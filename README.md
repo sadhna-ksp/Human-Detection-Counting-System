@@ -11,6 +11,15 @@ This project detects and counts humans in images, videos, or webcam feed using *
 
 ---
 
+## Tech stack
+- Python
+- YOLOv5
+- OpenCV
+- Django
+
+## How to Run
+   '''bash manage.py runserver
+   
 ## ⚙️ Setup Instructions
 
 1. Clone the Repository
