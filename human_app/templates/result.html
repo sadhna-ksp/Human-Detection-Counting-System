@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Detection Result</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg-color: #f3f4f6;
+      --text-color: #111;
+      --box-color: #fff;
+    }
+
+    body.dark {
+      --bg-color: #121212;
+      --text-color: #f3f4f6;
+      --box-color: #1e1e1e;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .theme-toggle {
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    .output-box {
+      background-color: var(--box-color);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      max-width: 800px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      transition: background-color 0.3s;
+    }
+
+    img, video {
+      max-width: 100%;
+      border-radius: 6px;
+    }
+
+    a.button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.2s;
+    }
+
+    a.button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px;
+      }
+    }
+  </style>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
+  </script>
+</head>
+<body>
+
+  <h2>Detection Output</h2>
+  <button class="theme-toggle" onclick="toggleTheme()">🌙 Toggle Dark Mode</button>
+
+  <div class="output-box">
+    {% if result_path %}
+      {% if ".mp4" in result_path %}
+        <p>Your processed video is ready for download:</p>
+        <a class="button" href="/static/{{ result_path }}" download>Download Video</a>
+      {% elif ".avi" in result_path %}
+        <p>Browser can't play AVI. Download the result:</p>
+        <a class="button" href="/static/{{ result_path }}" download>Download AVI</a>
+      {% elif ".jpg" in result_path or ".jpeg" in result_path or ".png" in result_path %}
+        <img src="/static/{{ result_path }}" alt="Detected Image">
+      {% else %}
+        <p>Unsupported file type.</p>
+      {% endif %}
+    {% else %}
+      <p>No result available.</p>
+    {% endif %}
+
+    <a class="button" href="/">⬅ Back to Home</a>
+  </div>
+
+</body>
+</html>

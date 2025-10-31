@@ -1,0 +1,32 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+env/
+venv/
+.venv/
+ENV/
+
+# Django files
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# YOLO model weights
+*.pt
+*.weights
+*.onnx
+models/
+
+# IDE and build folders
+.vscode/
+.idea/
+.dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+

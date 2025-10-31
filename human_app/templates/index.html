@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Human Detection and Counting System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg-color: #f3f4f6;
+      --text-color: #111;
+      --box-color: #fff;
+    }
+
+    body.dark {
+      --bg-color: #121212;
+      --text-color: #f3f4f6;
+      --box-color: #1e1e1e;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .theme-toggle {
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    form {
+      background-color: var(--box-color);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: background-color 0.3s;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .section {
+      display: none;
+      flex-direction: column;
+    }
+
+    .section.active {
+      display: flex;
+    }
+
+    label {
+      font-weight: 500;
+    }
+
+    input[type="file"] {
+      margin-top: 5px;
+    }
+
+    button {
+      padding: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .spinner {
+      display: none;
+      text-align: center;
+    }
+
+    .spinner img {
+      width: 40px;
+      height: 40px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px;
+      }
+    }
+  </style>
+
+  <script>
+    function showSection() {
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(mode + "-section").classList.add('active');
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
+
+    function showSpinner() {
+      document.getElementById('spinner').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+
+  <h1>Human Detection and Counting System</h1>
+  <button class="theme-toggle" onclick="toggleTheme()">🌙 Toggle Dark Mode</button>
+
+  <form action="/process/" method="post" enctype="multipart/form-data" onsubmit="showSpinner()">
+    {% csrf_token %}
+
+    <div class="radio-group">
+      <label><input type="radio" name="mode" value="image" onchange="showSection()"> Upload Image</label>
+      <label><input type="radio" name="mode" value="video" onchange="showSection()"> Upload Video</label>
+      <label><input type="radio" name="mode" value="webcam" onchange="showSection()"> Use Webcam</label>
+    </div>
+
+    <div id="image-section" class="section">
+      <label>Select Image File:</label>
+      <input type="file" name="image" accept="image/*">
+    </div>
+
+    <div id="video-section" class="section">
+      <label>Select Video File:</label>
+      <input type="file" name="video" accept="video/*">
+    </div>
+
+    <div id="webcam-section" class="section">
+      <p>Click Submit to start webcam detection. A window will open for real-time detection.</p>
+    </div>
+
+    <button type="submit">Submit</button>
+
+    {% if error %}
+      <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <div class="spinner" id="spinner">
+      <p>Processing, please wait...</p>
+      <img src="https://i.gifer.com/YCZH.gif" alt="Loading...">
+    </div>
+  </form>
+
+</body>
+</html>
